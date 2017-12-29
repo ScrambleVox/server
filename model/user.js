@@ -33,10 +33,10 @@ const userSchema = mongoose.Schema({
   },
 });
 
-userSchema.methods.verifyPassword = function(password){
+userSchema.methods.verifyPassword = function (password) {
   return bcrypt.compare(`${password}${this.passwordSalt}`, this.passwordHash)
     .then(response => {
-      if (!response){
+      if (!response) {
         throw new httpErrors(401, '__AUTH__ incorrect username or password');
       }
       return this;
