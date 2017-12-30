@@ -3,13 +3,13 @@
 // ROUTER
 const {Router} = require('express');
 const httpErrors = require('http-errors');
-const bearerAuth = require('../lib/bearer-auth');
+const bearerAuth = require('../lib/middleware/bearer-auth');
 const Wave = require('../model/wave');
 
 // FOR UPLOADING
 const multer = require('multer');
 const upload = multer({dest: `${__dirname}/../temp`});
-const S3 = require('../lib/s3');
+const S3 = require('../lib/middleware/s3');
 
 const waveRouter = module.exports = new Router();
 
