@@ -7,7 +7,7 @@ const waveSchema = mongoose.Schema({
     type : mongoose.Schema.Types.ObjectId,
     required : true,
   },
-  filename : {
+  wavename : {
     type : String,
     required : true,
   },

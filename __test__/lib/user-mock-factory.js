@@ -6,12 +6,12 @@ const faker = require(`faker`);
 const userMockFactory = module.exports = {};
 
 userMockFactory.create = () => {
-  let mock = null;
-  mock.request({
+  let mock = {};
+  mock.request = {
     username: faker.internet.userName(),
     email: faker.internet.email(),
-    password: faker.lorem.words(3),
-  });
+    password: faker.internet.password(),
+  };
 
   return User.create(mock.request.username, mock.request.email, mock.request.password)
     .then(user => {
@@ -25,7 +25,8 @@ userMockFactory.create = () => {
     .then(user => {
       mock.user = user;
       return mock;
-    });
+    })
+    .catch(err => console.error('mock user create error: ', err));
 };
 
 userMockFactory.remove = () => User.remove({});

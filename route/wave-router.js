@@ -17,7 +17,7 @@ waveRouter.post('/waves', bearerAuth, upload.any(), (request, response, next) =>
   if(!request.user)
     return next(new httpErrors(404, '__ERROR__ not found'));
 
-  if(!request.body.filename || request.files.length > 1 || request.files[0].fieldname !== 'wave')
+  if(!request.body.wavename || request.files.length > 1 || request.files[0].fieldname !== 'wave')
     return next(new httpErrors(400, '__ERROR__ invalid request'));
 
   let file = request.files[0];
@@ -26,12 +26,12 @@ waveRouter.post('/waves', bearerAuth, upload.any(), (request, response, next) =>
   return S3.upload(file.path, key)
     .then(url => {
       return new Wave({
-        filename: request.body.filename,
+        wavename: request.body.wavename,
         user: request.user._id,
         url,
-      }).save;
+      }).save();
     })
-    .then(wave => response.json(wave)) //TODO: can change this to wave.url
+    .then(wave => response.json(wave)) //TODO: can change this to download or other response method? download wave.url?
     .catch(next);
 
 
