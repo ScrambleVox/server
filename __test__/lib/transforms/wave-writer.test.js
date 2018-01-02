@@ -7,15 +7,21 @@ describe('wave-writer', () => {
   test('should return a file at the output file path', done => {
     const inputFilePath = `${__dirname}/../../assets/testclip.wav`;
     
-    let constructedWaveFile = null;
-    const callback = (error, data) => {
-      constructedWaveFile = data;
-      
-      done();
-    };
+    waveParser.getFile(inputFilePath, (error, data) => {
+      let constructedWaveFile = data;
+      waveWriter.writeFile('./temp/output.wav', constructedWaveFile, (error) => {
+        if(error) {
+          console.error(error);
+          return;
+        }
+      });
 
-    waveParser.getFile(inputFilePath, callback);
-    waveWriter.writeFile('./temp/output.wav', constructedWaveFile, callback);
+    });
+    // console.log(constructedWaveFile.fileSize);
     expect('./temp/output.wav').toBeTruthy();
+
+    done();
+
+    
   });
 });
