@@ -64,4 +64,41 @@ describe('Wave router', () => {
           }));
     });
   });
+
+  describe('DELETE /waves', () => {
+
+    test('DELETE /waves should expect a status code of 204 if there are no errors deleting', () => {
+      let tempWaveMock = null;
+      return waveMock.create()
+        .then(waveMock => {
+          tempWaveMock = waveMock;
+          return superagent.delete(`${__API_URL__}/waves`)
+            .set('Authorization', `Bearer ${tempWaveMock.userMock.token}`);
+        })
+        .then(response => {
+          expect(response.status).toEqual(204);
+        });
+    });
+
+    test('DELETE /waves should expect a status code of 401 if token is bad', () => {
+      return superagent.delete(`${__API_URL__}/waves`)
+        .set('Authorization', `Bearer superIllegalToken`)
+        .then(Promise.reject)
+        .catch( response => expect(response.status).toEqual(401));
+    });
+
+
+    test('DELETE /waves should expect a status code of 404 if the user has no saved wave', () => {
+      let tempUserMock = null;
+      return userMock.create()
+        .then(mock => {
+          tempUserMock = mock;
+          return superagent.delete(`${__API_URL__}/waves`)
+            .set('Authorization', `Bearer ${tempUserMock.token}`);
+        })
+        .then(Promise.reject)
+        .catch(response => expect(response.status).toEqual(404));
+    });
+
+  });
 });
