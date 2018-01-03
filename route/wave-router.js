@@ -61,22 +61,26 @@ waveRouter.delete('/waves', bearerAuth, (request, response, next) => {
   if(!request.user){
     return next(new httpErrors(404, '__ERROR__ not found'));
   }
-  return Wave.findById(request.params.id)
+  return Wave.findOne({user: request.user._id})
     .then(wave => {
+      if(!wave){
+        throw new httpErrors(404, '__ERROR__ wave not found');
+      }
       let urlArray = wave.url.split('/');
-      let key = urlArray[urlArray.length - 1]; // is all of this uncessary because we dont have IDs?
+      let key = urlArray[urlArray.length - 1]; 
 
       return s3.remove(key)
         .then(() => {
-          return Wave.findByIdAndRemove(request.params.id)
+          return Wave.findOneAndRemove({user: request.user._id})
             .then(() => {
-              response.sendStatus(204);
+              return response.sendStatus(204);
             });
+        })
+        .catch(error => {
+          return Wave.findOneAndRemove({ user: request.user._id })
+            .then(() => Promise.reject(error))
+            .catch(next);
         });
     })
-    .catch(error => {
-      return Wave.findByIdAndRemove(request.params.id)
-        .then(() => Promise.reject(error))
-        .catch(next);
-    });
+    .catch(next);
 });
