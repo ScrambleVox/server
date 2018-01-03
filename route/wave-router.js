@@ -57,6 +57,21 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
     });
 });
 
+waveRouter.get('/waves', bearerAuth, (request, response, next) => {
+  if (!request.user) {
+    return next(new httpErrors(404, '__ERROR__ not found'));
+  }
+
+  return Wave.findOne({ user: request.user._id })
+    .then(wave => {
+      if (!wave) {
+        throw new httpErrors(404, '__ERROR__ wave not found');
+      }
+      return response.json(wave);
+    })
+    .catch(next);
+});
+
 waveRouter.delete('/waves', bearerAuth, (request, response, next) => {
   if(!request.user){
     return next(new httpErrors(404, '__ERROR__ not found'));
