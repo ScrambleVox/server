@@ -3,40 +3,30 @@
 const waveParser = require('../../../lib/transforms/wave-parser');
 
 describe('wave-parser', () => {
-  test('should return constructedWaveFile which contains buffer and other data attached', done => {
+  test('should return constructedWaveFile which contains buffer and other data attached', () => {
     const inputFilePath = `${__dirname}/../../assets/testclip.wav`;
-    const numberOfChannels = 2;
-    const sampleRate = 8000;
-    const bitsPerSample = 8;
-    const subChunk2Size = 46986;
 
-    let constructedWaveFile = null;
+    waveParser(inputFilePath)
+      .then(parsedFile => {
+        expect(parsedFile.buffer).toBeTruthy();
+        expect(parsedFile.numberOfChannels).toEqual(2);
+        expect(parsedFile.sampleRate).toEqual(8000);
+        expect(parsedFile.bitsPerSample).toEqual(8);
+        expect(parsedFile.subChunk2Size).toEqual(46986);
+        expect(parsedFile.data).toBeTruthy();
 
-    const callback = (error, data) => {
-      constructedWaveFile = data;
-      expect(error).toBeNull();
-      expect(constructedWaveFile.buffer).toBeTruthy();
-      expect(constructedWaveFile.numberOfChannels).toEqual(numberOfChannels);
-      expect(constructedWaveFile.sampleRate).toEqual(sampleRate);
-      expect(constructedWaveFile.bitsPerSample).toEqual(bitsPerSample);
-      expect(constructedWaveFile.subChunk2Size).toEqual(subChunk2Size);
-      expect(constructedWaveFile.data).toBeTruthy();
-      done();
-    };
+      });
 
-    waveParser.getFile(inputFilePath, callback);
   });
 
-  test('should return error if no file exists at path', done => {
+  test('should return error if no file exists at path', () => {
     const inputFilePath = `${__dirname}/badpath.wav`;
 
-
-    const callback = (error) => {
-      expect(error).toBeTruthy();
-      done();
-    };
-
-    waveParser.getFile(inputFilePath, callback);
+    waveParser(inputFilePath)
+      .then(Promise.reject)
+      .catch(err => {
+        expect(err.code).toBe('ENOENT');
+      });
 
   });
 });
