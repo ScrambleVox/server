@@ -65,7 +65,7 @@ describe('Wave router', () => {
     });
   });
 
-  describe.only('DELETE /waves', () => {
+  describe('DELETE /waves', () => {
 
     test('DELETE /waves should expect a status code of 204 if there are no errors deleting', () => {
       let tempWaveMock = null;
