@@ -1,3 +1,5 @@
+import { DBRef } from '../../../../../../Library/Caches/typescript/2.6/node_modules/@types/bson';
+
 'use strict';
 
 require('./lib/setup');
@@ -64,4 +66,43 @@ describe('Wave router', () => {
           }));
     });
   });
+
+  describe('DELETE /waves', () => {
+
+    test('DELETE /waves should expect a status code of 204 if there are no errors deleting', () => {
+      let tempWaveMock = null;
+      return waveMock.create()
+        .then(waveMock => {
+          tempWaveMock = waveMock;
+          return superagent.delete(`${__API_URL__}/waves`)
+          .set('Authorization', `Bearer ${tempUserMock.token}`)
+        })
+        .then(response => {
+          expect(response.status).toEqual(204);
+        });
+    });
+
+    test('DELETE /waves should expect a status code of 401 if token is bad', () => {
+      let tempWaveMock = null;
+      return waveMock.create()
+        .then(waveMock => {
+          tempWaveMock = waveMock;
+          return superagent.delete(`${__API_URL__}/waves`)
+          .set('Authorization', `Bearer superIllegalToken`)
+        })
+        .then(Promise.reject)
+        .catch(
+          response => {
+          expect(response.status).toEqual(401);
+        });
+    });
 });
+
+// pseudo code 
+// find user that relates to the token - findUserById(token)
+//  find wave by ID from the user on the DB
+//  delete by url at AWS
+
+// bad token
+
+// what to do if user tries a DELETE route and no files exist
