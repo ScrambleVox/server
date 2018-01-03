@@ -1,6 +1,0 @@
-(all little endian)
-
-number of channels (offset 22, size 2 bytes)
-sample rate (offset 24, size 4 bytes)
-bits per sample (offset 34, size 2 bytes)
-data (offset 44)

@@ -7,7 +7,7 @@ describe('wave-parser', () => {
     const inputFilePath = `${__dirname}/../../assets/testclip.wav`;
     const numberOfChannels = 2;
     const sampleRate = 8000;
-    const bitPerSample = 8;
+    const bitsPerSample = 8;
     const subChunk2Size = 46986;
 
     let constructedWaveFile = null;
@@ -18,7 +18,7 @@ describe('wave-parser', () => {
       expect(constructedWaveFile.buffer).toBeTruthy();
       expect(constructedWaveFile.numberOfChannels).toEqual(numberOfChannels);
       expect(constructedWaveFile.sampleRate).toEqual(sampleRate);
-      expect(constructedWaveFile.bitPerSample).toEqual(bitPerSample);
+      expect(constructedWaveFile.bitsPerSample).toEqual(bitsPerSample);
       expect(constructedWaveFile.subChunk2Size).toEqual(subChunk2Size);
       expect(constructedWaveFile.data).toBeTruthy();
       done();
