@@ -9,6 +9,7 @@ const waveParser = require('../lib/transforms/wave-parser');
 const bitCrusher = require('../lib/transforms/bitcrusher');
 const downPitcher = require('../lib/transforms/sample-rate-transform');
 const Wave = require('../model/wave');
+const s3 = require('../lib/middleware/s3');
 
 // FOR UPLOADING
 const multer = require('multer');
@@ -53,5 +54,29 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
             .then(wave => response.json(wave)) //TODO: can change this to download or other response method? download wave.url?
             .catch(next);
         });
+    });
+});
+
+waveRouter.delete('/waves', bearerAuth, (request, response, next) => {
+  if(!request.user){
+    return next(new httpErrors(404, '__ERROR__ not found'));
+  }
+  return Wave.findById(request.params.id)
+    .then(wave => {
+      let urlArray = wave.url.split('/');
+      let key = urlArray[urlArray.length - 1]; // is all of this uncessary because we dont have IDs?
+
+      return s3.remove(key)
+        .then(() => {
+          return Wave.findByIdAndRemove(request.params.id)
+            .then(() => {
+              response.sendStatus(204);
+            });
+        });
+    })
+    .catch(error => {
+      return Wave.findByIdAndRemove(request.params.id)
+        .then(() => Promise.reject(error))
+        .catch(next);
     });
 });
