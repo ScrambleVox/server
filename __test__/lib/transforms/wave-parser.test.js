@@ -9,16 +9,13 @@ describe('wave-parser', () => {
 
     return fsx.readFile(inputFilePath)
       .then(data => {
-        return waveParser(data)
-          .then(parsedFile => {
-            expect(parsedFile.buffer).toBeTruthy();
-            expect(parsedFile.numberOfChannels).toEqual(2);
-            expect(parsedFile.sampleRate).toEqual(8000);
-            expect(parsedFile.bitsPerSample).toEqual(8);
-            expect(parsedFile.subChunk2Size).toEqual(46986);
-            expect(parsedFile.data).toBeTruthy();
-  
-          });
+        const parsedFile = waveParser(data);
+        expect(parsedFile.buffer).toBeTruthy();
+        expect(parsedFile.numberOfChannels).toEqual(2);
+        expect(parsedFile.sampleRate).toEqual(8000);
+        expect(parsedFile.bitsPerSample).toEqual(8);
+        expect(parsedFile.subChunk2Size).toEqual(46986);
+        expect(parsedFile.data).toBeTruthy();
       });
 
   });
@@ -28,11 +25,7 @@ describe('wave-parser', () => {
 
     return fsx.readFile(inputFilePath)
       .then(data => {
-        waveParser(data)
-          .then(Promise.reject)
-          .catch(err => {
-            expect(err.message).toBe('incorrect file type, must be RIFF format');
-          });
+        expect(() => waveParser(data)).toThrow('incorrect file type, must be RIFF format');
       });
   });
 
@@ -41,11 +34,7 @@ describe('wave-parser', () => {
 
     return fsx.readFile(inputFilePath)
       .then(data => {
-        waveParser(data)
-          .then(Promise.reject)
-          .catch(err => {
-            expect(err.message).toBe('file too large, please limit file size to less than 1MB');
-          });
+        expect(() => waveParser(data)).toThrow('file too large, please limit file size to less than 1MB');
       });
   });
 
@@ -54,11 +43,7 @@ describe('wave-parser', () => {
 
     return fsx.readFile(inputFilePath)
       .then(data => {
-        waveParser(data)
-          .then(Promise.reject)
-          .catch(err => {
-            expect(err.message).toBe('file must be a WAVE');
-          });
+        expect(() => waveParser(data)).toThrow('file must be a WAVE');
       });
   });
 
@@ -67,11 +52,7 @@ describe('wave-parser', () => {
 
     return fsx.readFile(inputFilePath)
       .then(data => {
-        waveParser(data)
-          .then(Promise.reject)
-          .catch(err => {
-            expect(err.message).toBe('the first subchunk must be fmt');
-          });
+        expect(() => waveParser(data)).toThrow('the first subchunk must be fmt');
       });
   });
 
@@ -80,11 +61,7 @@ describe('wave-parser', () => {
 
     return fsx.readFile(inputFilePath)
       .then(data => {
-        waveParser(data)
-          .then(Promise.reject)
-          .catch(err => {
-            expect(err.message).toBe('wave file must be uncompressed linear PCM');
-          });
+        expect(() => waveParser(data)).toThrow('wave file must be uncompressed linear PCM');
       });
   });
 
@@ -93,11 +70,7 @@ describe('wave-parser', () => {
 
     return fsx.readFile(inputFilePath)
       .then(data => {
-        waveParser(data)
-          .then(Promise.reject)
-          .catch(err => {
-            expect(err.message).toBe('wave file must have 2 or less channels');
-          });
+        expect(() => waveParser(data)).toThrow('wave file must have 2 or less channels');
       });
   });
 
@@ -106,11 +79,7 @@ describe('wave-parser', () => {
 
     return fsx.readFile(inputFilePath)
       .then(data => {
-        waveParser(data)
-          .then(Promise.reject)
-          .catch(err => {
-            expect(err.message).toBe('wave file must have sample rate of less than 48k');
-          });
+        expect(() => waveParser(data)).toThrow('wave file must have sample rate of less than 48k');
       });
   });
 
@@ -119,11 +88,7 @@ describe('wave-parser', () => {
 
     return fsx.readFile(inputFilePath)
       .then(data => {
-        waveParser(data)
-          .then(Promise.reject)
-          .catch(err => {
-            expect(err.message).toBe(`file's bit depth must be 8 or 16`);
-          });
+        expect(() => waveParser(data)).toThrow(`file's bit depth must be 8 or 16`);
       });
   });
 
@@ -132,11 +97,7 @@ describe('wave-parser', () => {
 
     return fsx.readFile(inputFilePath)
       .then(data => {
-        waveParser(data)
-          .then(Promise.reject)
-          .catch(err => {
-            expect(err.message).toBe('subchunk 2 must be data');
-          });
+        expect(() => waveParser(data)).toThrow('subchunk 2 must be data');
       });
   });
 
