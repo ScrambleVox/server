@@ -19,9 +19,28 @@ ScrambleVox implements continuous integration (CI) via Travis CI and continuous 
 
 Tests examine both proper behavior for each route as well as behavior when errors occur. The following tests can be executed by running 'npm test' after following the steps under 'Set Up'. Note: failure to set up the API properly before running tests will prevent tests from running.
 
-1. Wave Parser Tests
-  * Tests success case in which file meets all requirements and a new Constructed Wave File is created
-  * Tests failure cases in which
+1. User Router Tests
+  * POST
+    * Tests success case in which the username, email, and password are included and a new account and token are successfully created.
+    * Tests failure cases in which:
+      * The request is missing information (username, email, and password are all required)
+      * Either the username or email provided are already being used for another account
+
+  * GET
+    * Tests success case in which the account username and password are verified and a token can successfully be returned.
+    * Tests failure cases in which:
+      * No basic authentication is provided in the HTTP authorization header.
+      * No user can be found with the specified username and password.
+
+2. Wave Router Tests
+  * Tests success case in which a user successfully makes an account, the file provided is modified, and the url to the modified file is returned.
+  * Tests failure cases in which:
+    * The user is verified using bearer authorization but the request is bad.
+    * No authorization header is included in the request.
+
+3. Wave Parser Tests
+  * Tests success case in which file meets all requirements and a new Constructed Wave File is created.
+  * Tests failure cases in which:
     * The file is the incorrect format (not RIFF or not WAV)
     * The file size is too large
     * The file has additional pieces of data that are unexpected (subchunk id 1 or subchunk id 2 do not match the expected values of 'fmt' and 'data' respectively)
@@ -30,11 +49,11 @@ Tests examine both proper behavior for each route as well as behavior when error
     * The sample rate is too high (above 48k)
     * The file has a bit depth other than 8 or 16 bits
 
-2. Bitcrusher Tests
-  * Tests success cases for 8 bit and 16 bit files in which the second part of each sample is "crushed", flattening out waves into a more rectangular shape
+4. Bitcrusher Tests
+  * Tests success cases for 8 bit and 16 bit files in which the second part of each sample is "crushed", flattening out waves into a more rectangular shape.
 
-3. Sample Rate Tests
-  * Tests success case in which the sample rate of the file is reduced 50%
+5. Sample Rate Tests
+  * Tests success case in which the sample rate of the file is reduced 50%.
 
 ## Transforms
 1. Bitcrusher: Reduces the resolution of the audio from 8 or 16 bits to 2 bits without affecting bit depth.
@@ -50,9 +69,11 @@ Tests examine both proper behavior for each route as well as behavior when error
 1. POST /waves/bitcrusher: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
 <!-- 2. POST /waves/transform2 -->
 
-## Internal Infrastructure/Code Examples
+<!-- Do we want to include the section below? I don't think they're required but they were in some of the READMEs of the examples Vinicio shared -->
+
+<!-- ## Internal Infrastructure/Code Examples
 1. models (user and wave)
-2. middleware (express, fs-extra?, error, logger, basic auth, bearer auth)
+2. middleware (express, fs-extra?, error, logger, basic auth, bearer auth) -->
 
 ## Technologies Used
 ### For production
