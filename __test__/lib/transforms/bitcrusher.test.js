@@ -8,7 +8,7 @@ describe('testing bitcrusher transform module', () => {
     file.bitsPerSample = 8;
     file.data = Buffer.from([248, 129, 70, 4]);
     bitcrusher(file);
-    expect(file.data[0]).toEqual(192);
+    expect(file.data[0]).toEqual(224);
     expect(file.data[1]).toEqual(128);
     expect(file.data[2]).toEqual(64);
     expect(file.data[3]).toEqual(0);
