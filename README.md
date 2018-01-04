@@ -1,8 +1,6 @@
 ## Purpose
 This API is designed based on RESTful principles. Currently it is focused on back-end functionality, with a CLI intended as a future improvement. It enables users to transform an 8 bit or 16 bit WAV audio file using one of the provided functions (see 'Transforms').
 
-<!-- we can add in encryption if we reach that point -->
-
 ## Set Up
 To set up ScrambleVox on your own machine, follow the steps below.
 
@@ -67,7 +65,10 @@ Tests examine both proper behavior for each route as well as behavior when error
 
 ### Transforming files
 1. POST /waves/bitcrusher: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
-<!-- 2. POST /waves/transform2 -->
+2. POST /waves/delay:
+3. POST /waves/noise-add:
+4. POST /waves/reverse:
+5. POST /waves/sample-rate-transform:
 
 <!-- Do we want to include the section below? I don't think they're required but they were in some of the READMEs of the examples Vinicio shared -->
 
@@ -105,6 +106,8 @@ If you would like to help improve this API you can do so by opening an issue und
 
 ## License
 MIT (see License file)
+
+## Creators
 
 ## Credits
 Thank you to Vinicio Vladimir Sanchez Trejo, Steve Geluso, Izzy Baer, Joshua Evans, and Ron Dunphy for help problem solving and identifying useful tools to examine WAV files.
