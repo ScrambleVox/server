@@ -49,6 +49,9 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
   if (request.params.transform === 'reverse'){
     transformFunc = reverse;
   }
+  if (request.params.transform === 'scrambler'){
+    transformFunc = param => noiseAdd(downPitcher(delay(bitCrusher(param))));
+  }
   
   // Andrew - Can we refactor this with a Promise.all? Or something? I'd like to make this more dry, but we need to maintain the promise chain/order of events.
 
@@ -121,7 +124,7 @@ waveRouter.get('/waves', bearerAuth, (request, response, next) => {
 });
 
 waveRouter.delete('/waves', bearerAuth, (request, response, next) => {
-  return Wave.findOne({user: request.user._id})
+  return Wave.findOneAndRemove({user: request.user._id})
     .then(wave => {
       if(!wave){
         throw new httpErrors(404, '__ERROR__ wave not found');
@@ -131,16 +134,9 @@ waveRouter.delete('/waves', bearerAuth, (request, response, next) => {
 
       return s3.remove(key)
         .then(() => {
-          return Wave.findOneAndRemove({user: request.user._id})
-            .then(() => {
-              return response.sendStatus(204);
-            });
+          return response.sendStatus(204);
         })
-        .catch(error => {
-          return Wave.findOneAndRemove({user: request.user._id})
-            .then(() => Promise.reject(error))
-            .catch(next);
-        });
+        .catch(next);
     })
     .catch(next);
 });
