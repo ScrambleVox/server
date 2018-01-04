@@ -26,7 +26,7 @@ userMockFactory.create = () => {
       mock.user = user;
       return mock;
     })
-    .catch(err => console.error('mock user create error: ', err));
+    .catch(err => console.error('user-mock-factory: user.create error: ', err));
 };
 
 userMockFactory.remove = () => User.remove({});
