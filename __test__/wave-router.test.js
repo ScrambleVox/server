@@ -86,6 +86,27 @@ describe('Wave router', () => {
     });
   });
 
+  describe('POST /waves/delay', () => {
+    test('POST /waves/delay should return a 200 status and a url if there are no errors', () => {
+      let tempUserMock = null;
+      return userMock.create()
+        .then(userMock => {
+          tempUserMock = userMock;
+
+          return superagent.post(`${__API_URL__}/waves/delay`)
+            .set('Authorization', `Bearer ${tempUserMock.token}`)
+            .field('wavename', 'cornsilk')
+            .attach('wave', `${__dirname}/assets/testclip.wav`)
+            .then(response => {
+              expect(response.status).toEqual(200);
+              expect(response.body.wavename).toEqual('cornsilk');
+              expect(response.body._id).toBeTruthy();
+              expect(response.body.url).toBeTruthy();
+            });
+        });
+    });
+  });
+
   describe('GET /waves', () => {
 
     test('GET /waves should expect a 200 status code and return a wave', () => {
