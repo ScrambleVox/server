@@ -1,5 +1,16 @@
+# SCRAMBLE VOX
+
+_scramble a WAV file of your choice, with a transformation of your voice_
+
+![picture of WAV file](/assets/AudacityWAV.png)
+
+
 ## Purpose
 This API is designed based on RESTful principles. Currently it is focused on back-end functionality, with a CLI intended as a future improvement. It enables users to transform an 8 bit or 16 bit WAV audio file using one of the provided functions (see 'Transforms').
+
+## To Record audio in WAV formats for this app
+[Audacity](https://www.audacityteam.org/) : free, open source, cross-platform audio software for multi-track recording and editing for Mac, Windows, and Linux.
+
 
 ## Set Up
 To set up ScrambleVox on your own machine, follow the steps below.
@@ -58,6 +69,12 @@ Tests examine both proper behavior for each route as well as behavior when error
 
 2. Sample Rate Reduction: Reduces the sample rate of the audio file by half, reducing the maximum possible frequency of the recording.
 
+3. Delay: Adds a portion of the sound wave from another part of the sound wave that occurred in the past simulating an echo.
+
+4. Noise Addition: Adds a small percentage of noise to the sound wave. 
+
+5. Reverse: Reverses the sound wave. 
+
 ## Routes
 ### Account setup
 1. POST /signup: Creates a new account and responds with a token. You must include a username (String), email (String), and password (String).
@@ -108,6 +125,10 @@ If you would like to help improve this API you can do so by opening an issue und
 MIT (see License file)
 
 ## Creators
+- Andrew Bloom | [GitHub](https://github.com/ALB37)
+- Jeff Kusowski | [GitHub](https://github.com/jjkusowski)
+- Shannon Dillon | [GitHub](https://github.com/sedillon93)
+- David A. Lindahl | [GitHub](https://github.com/austriker27)
 
 ## Credits
 Thank you to Vinicio Vladimir Sanchez Trejo, Steve Geluso, Izzy Baer, Joshua Evans, and Ron Dunphy for help problem solving and identifying useful tools to examine WAV files.
