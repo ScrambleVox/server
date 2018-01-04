@@ -8,6 +8,8 @@ const bearerAuth = require('../lib/middleware/bearer-auth');
 const waveParser = require('../lib/transforms/wave-parser');
 const bitCrusher = require('../lib/transforms/bitcrusher');
 const downPitcher = require('../lib/transforms/sample-rate-transform');
+const delay = require('../lib/transforms/delay');
+
 const Wave = require('../model/wave');
 const s3 = require('../lib/middleware/s3');
 
@@ -40,6 +42,9 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
       }
       if(request.params.transform === 'downpitcher'){
         transformedFile = downPitcher(parsedFile);
+      }
+      if (request.params.transform === 'delay') {
+        transformedFile = delay(parsedFile);
       }
       return fsx.writeFile(tempFilePath, transformedFile)
         .then(() => {
