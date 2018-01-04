@@ -9,7 +9,6 @@ const waveSchema = mongoose.Schema({
   },
   wavename : {
     type : String,
-    required : true,
   },
   url : {
     type : String,
