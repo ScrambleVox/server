@@ -10,6 +10,7 @@ const bitCrusher = require('../lib/transforms/bitcrusher');
 const downPitcher = require('../lib/transforms/sample-rate-transform');
 const delay = require('../lib/transforms/delay');
 const noiseAdd = require('../lib/transforms/noise-add');
+const reverse = require('../lib/transforms/reverse');
 
 const Wave = require('../model/wave');
 const s3 = require('../lib/middleware/s3');
@@ -31,6 +32,26 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
   const key = `${file.filename}.${file.originalname}`;
   const tempFilePath = `${__dirname}/../temp/transform-temp.wav`;
   let transformedFile = null;
+  let transformFunc = null;
+
+  if (request.params.transform === 'bitcrusher'){
+    transformFunc = bitCrusher;
+  }
+  if (request.params.transform === 'downpitcher'){
+    transformFunc = downPitcher;
+  }
+  if (request.params.transform === 'delay'){
+    transformFunc = delay;
+  }
+  if (request.params.transform === 'noise'){
+    transformFunc = noiseAdd;
+  }
+  if (request.params.transform === 'reverse'){
+    transformFunc = reverse;
+  }
+  if (request.params.transform === 'scrambler'){
+    transformFunc = param => noiseAdd(downPitcher(delay(bitCrusher(param))));
+  }
   
   // Andrew - Can we refactor this with a Promise.all? Or something? I'd like to make this more dry, but we need to maintain the promise chain/order of events.
 
@@ -48,18 +69,7 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
                 return fsx.readFile(file.path)
                   .then(data => {
                     const parsedFile = waveParser(data);
-                    if (request.params.transform === 'bitcrusher'){
-                      transformedFile = bitCrusher(parsedFile);
-                    }
-                    if (request.params.transform === 'downpitcher'){
-                      transformedFile = downPitcher(parsedFile);
-                    }
-                    if (request.params.transform === 'delay'){
-                      transformedFile = delay(parsedFile);
-                    }
-                    if (request.params.transform === 'noise'){
-                      transformedFile = noiseAdd(parsedFile);
-                    }
+                    transformedFile = transformFunc(parsedFile);
                     return fsx.writeFile(tempFilePath, transformedFile)
                       .then(() => {
                         return S3.upload(tempFilePath, key)
@@ -81,18 +91,7 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
         return fsx.readFile(file.path) 
           .then(data => {
             const parsedFile = waveParser(data);
-            if(request.params.transform === 'bitcrusher'){
-              transformedFile = bitCrusher(parsedFile);
-            }
-            if(request.params.transform === 'downpitcher'){
-              transformedFile = downPitcher(parsedFile);
-            }
-            if (request.params.transform === 'delay'){
-              transformedFile = delay(parsedFile);
-            }
-            if (request.params.transform === 'noise'){
-              transformedFile = noiseAdd(parsedFile);
-            }
+            transformedFile = transformFunc(parsedFile);
             return fsx.writeFile(tempFilePath, transformedFile)
               .then(() => {
                 return S3.upload(tempFilePath, key)
@@ -125,7 +124,7 @@ waveRouter.get('/waves', bearerAuth, (request, response, next) => {
 });
 
 waveRouter.delete('/waves', bearerAuth, (request, response, next) => {
-  return Wave.findOne({user: request.user._id})
+  return Wave.findOneAndRemove({user: request.user._id})
     .then(wave => {
       if(!wave){
         throw new httpErrors(404, '__ERROR__ wave not found');
@@ -135,16 +134,9 @@ waveRouter.delete('/waves', bearerAuth, (request, response, next) => {
 
       return s3.remove(key)
         .then(() => {
-          return Wave.findOneAndRemove({user: request.user._id})
-            .then(() => {
-              return response.sendStatus(204);
-            });
+          return response.sendStatus(204);
         })
-        .catch(error => {
-          return Wave.findOneAndRemove({user: request.user._id})
-            .then(() => Promise.reject(error))
-            .catch(next);
-        });
+        .catch(next);
     })
     .catch(next);
 });
