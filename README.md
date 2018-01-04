@@ -1,4 +1,7 @@
 # SCRAMBLE VOX
+[![Build Status](https://travis-ci.org/ScrambleVox/server.svg?branch=readme)](https://travis-ci.org/ScrambleVox/server)
+![Heroku](http://heroku-badge.herokuapp.com/?app=angularjs-crypto&style=flat&svg=1)
+
 
 _scramble a WAV file of your choice, with a transformation of your voice_
 
@@ -66,14 +69,19 @@ Tests examine both proper behavior for each route as well as behavior when error
 
 ## Transforms
 1. *Bitcrusher*: Reduces the resolution of the audio from 8 or 16 bits to 2 bits without affecting bit depth.
+![picture of sound wave](/filepath)
 
 2. *Sample Rate Reduction*: Reduces the sample rate of the audio file by half, reducing the maximum possible frequency of the recording.
+![picture of sound wave](/filepath)
 
 3. *Delay*: Adds a portion of the sound wave to the current point from the prior sound wave via a fixed interval; simulating an echo.
+![picture of sound wave](/assets/delay.png)
 
 4. *Noise Addition*: Adds a small random number to each sample which has the effect of adding noise to the sound wave. 
+![picture of sound wave](/assets/noise.png)
 
-5. *Reverse*: Reverses the sound wave. 
+5. *Reverse*: Reverses the sound wave.
+![picture of sound wave](/assets/reverse.png)
 
 ## Routes
 ### Account setup
