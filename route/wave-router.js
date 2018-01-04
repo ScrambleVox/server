@@ -9,6 +9,7 @@ const waveParser = require('../lib/transforms/wave-parser');
 const bitCrusher = require('../lib/transforms/bitcrusher');
 const downPitcher = require('../lib/transforms/sample-rate-transform');
 const delay = require('../lib/transforms/delay');
+const noiseAdd = require('../lib/transforms/noise-add');
 
 const Wave = require('../model/wave');
 const s3 = require('../lib/middleware/s3');
@@ -47,14 +48,17 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
                 return fsx.readFile(file.path)
                   .then(data => {
                     const parsedFile = waveParser(data);
-                    if (request.params.transform === 'bitcrusher') {
+                    if (request.params.transform === 'bitcrusher'){
                       transformedFile = bitCrusher(parsedFile);
                     }
-                    if (request.params.transform === 'downpitcher') {
+                    if (request.params.transform === 'downpitcher'){
                       transformedFile = downPitcher(parsedFile);
                     }
-                    if (request.params.transform === 'delay') {
+                    if (request.params.transform === 'delay'){
                       transformedFile = delay(parsedFile);
+                    }
+                    if (request.params.transform === 'noise'){
+                      transformedFile = noiseAdd(parsedFile);
                     }
                     return fsx.writeFile(tempFilePath, transformedFile)
                       .then(() => {
@@ -83,8 +87,11 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
             if(request.params.transform === 'downpitcher'){
               transformedFile = downPitcher(parsedFile);
             }
-            if (request.params.transform === 'delay') {
+            if (request.params.transform === 'delay'){
               transformedFile = delay(parsedFile);
+            }
+            if (request.params.transform === 'noise'){
+              transformedFile = noiseAdd(parsedFile);
             }
             return fsx.writeFile(tempFilePath, transformedFile)
               .then(() => {
@@ -109,7 +116,7 @@ waveRouter.get('/waves', bearerAuth, (request, response, next) => {
 
   return Wave.findOne({ user: request.user._id })
     .then(wave => {
-      if (!wave) {
+      if (!wave){
         throw new httpErrors(404, '__ERROR__ wave not found');
       }
       return response.json(wave);
