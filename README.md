@@ -65,27 +65,27 @@ Tests examine both proper behavior for each route as well as behavior when error
   * Tests success case in which the sample rate of the file is reduced 50%.
 
 ## Transforms
-1. Bitcrusher: Reduces the resolution of the audio from 8 or 16 bits to 2 bits without affecting bit depth.
+1. *Bitcrusher*: Reduces the resolution of the audio from 8 or 16 bits to 2 bits without affecting bit depth.
 
-2. Sample Rate Reduction: Reduces the sample rate of the audio file by half, reducing the maximum possible frequency of the recording.
+2. *Sample Rate Reduction*: Reduces the sample rate of the audio file by half, reducing the maximum possible frequency of the recording.
 
-3. Delay: Adds a portion of the sound wave from another part of the sound wave that occurred in the past simulating an echo.
+3. *Delay*: Adds a portion of the sound wave to the current point from the prior sound wave via a fixed interval; simulating an echo.
 
-4. Noise Addition: Adds a small percentage of noise to the sound wave. 
+4. *Noise Addition*: Adds a small random number to each sample which has the effect of adding noise to the sound wave. 
 
-5. Reverse: Reverses the sound wave. 
+5. *Reverse*: Reverses the sound wave. 
 
 ## Routes
 ### Account setup
-1. POST /signup: Creates a new account and responds with a token. You must include a username (String), email (String), and password (String).
-2. GET /login: Accesses an account and returns a new token. You must send the account's username and password in the authorization header of the request. If no basic authentication is included a 400 error will occur.
+1. **POST** /signup: Creates a new account and responds with a token. You must include a username (String), email (String), and password (String).
+2. **GET** /login: Accesses an account and returns a new token. You must send the account's username and password in the authorization header of the request. If no basic authentication is included a 400 error will occur.
 
 ### Transforming files
-1. POST /waves/bitcrusher: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
-2. POST /waves/delay:
-3. POST /waves/noise-add:
-4. POST /waves/reverse:
-5. POST /waves/sample-rate-transform:
+1. **POST** /waves/bitcrusher: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
+2. **POST** /waves/delay: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
+3. **POST** /waves/noise-add: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
+4. **POST** /waves/reverse: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
+5. **POST** /waves/sample-rate-transform: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
 
 <!-- Do we want to include the section below? I don't think they're required but they were in some of the READMEs of the examples Vinicio shared -->
 
