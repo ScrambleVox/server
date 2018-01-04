@@ -13,7 +13,7 @@ waveMockFactory.create = () => {
       mock.userMock = userMock;
       return new Wave({
         user: userMock.user._id,
-        filename: faker.lorem.words(1),
+        wavename: faker.lorem.words(1),
         url: faker.internet.url(),
       }).save();
     })

@@ -9,6 +9,7 @@ const waveParser = require('../lib/transforms/wave-parser');
 const bitCrusher = require('../lib/transforms/bitcrusher');
 const downPitcher = require('../lib/transforms/sample-rate-transform');
 const Wave = require('../model/wave');
+const s3 = require('../lib/middleware/s3');
 
 // FOR UPLOADING
 const multer = require('multer');
@@ -54,4 +55,47 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
             .catch(next);
         });
     });
+});
+
+waveRouter.get('/waves', bearerAuth, (request, response, next) => {
+  if (!request.user) {
+    return next(new httpErrors(404, '__ERROR__ not found'));
+  }
+
+  return Wave.findOne({ user: request.user._id })
+    .then(wave => {
+      if (!wave) {
+        throw new httpErrors(404, '__ERROR__ wave not found');
+      }
+      return response.json(wave);
+    })
+    .catch(next);
+});
+
+waveRouter.delete('/waves', bearerAuth, (request, response, next) => {
+  if(!request.user){
+    return next(new httpErrors(404, '__ERROR__ not found'));
+  }
+  return Wave.findOne({user: request.user._id})
+    .then(wave => {
+      if(!wave){
+        throw new httpErrors(404, '__ERROR__ wave not found');
+      }
+      let urlArray = wave.url.split('/');
+      let key = urlArray[urlArray.length - 1]; 
+
+      return s3.remove(key)
+        .then(() => {
+          return Wave.findOneAndRemove({user: request.user._id})
+            .then(() => {
+              return response.sendStatus(204);
+            });
+        })
+        .catch(error => {
+          return Wave.findOneAndRemove({ user: request.user._id })
+            .then(() => Promise.reject(error))
+            .catch(next);
+        });
+    })
+    .catch(next);
 });
