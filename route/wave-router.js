@@ -47,18 +47,15 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
   if (request.params.transform === 'reverse'){
     transformFunc = reverse;
   }
-  // if (request.params.transform === 'scrambler'){
-  //   transformFunc = param => downPitcher(waveParser(delay(waveParser(bitCrusher(param)))));
-  // }
-
+  
   return Wave.findOne({user: request.user._id})
     .then(wave => {
       if(wave){
         
-        let urlArray = wave.url.split('/');
-        let key = urlArray[urlArray.length - 1]; 
+        const urlArray = wave.url.split('/');
+        const oldKey = urlArray[urlArray.length - 1]; 
         
-        return s3.remove(key)
+        return s3.remove(oldKey)
           .then(() => {
             return Wave.findOneAndRemove({user: request.user._id})
               .then(() => {
@@ -76,7 +73,7 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
                               url,
                             }).save();
                           })
-                          .then(wave => response.json(wave))
+                          .then(newWave => response.json(newWave))
                           .catch(next);
                       });
                   });
