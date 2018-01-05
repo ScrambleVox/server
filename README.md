@@ -21,27 +21,30 @@ Familiarity with node, git and the command line are expected. To set up Scramble
 [Audacity](https://www.audacityteam.org/) : free, open source, cross-platform audio software for multi-track recording and editing.
 ***
 ## Models
-
+### User
+The user schema defines a userame, passwordHash, passwordSalt and email. The username and email must be unique. When a user signs up, a passwordSalt is randomly generated, and a hash is created using this along with their password. The password is never stored anywhere. A token seed is then randomly generated and encrypted with the application's secret salt, and the resulting token is returned to the user. When the user logs back in, their password is hashed along with their passwordSalt, and if this matches the stored hash, a new tokenSeed is generated, stored, encrypted and the resulting token is sent back to the user. When certain requests are made, the user sends their token, which is decrypted by the secret salt, and if it matches their tokenseed, they are authorized to finish making the request.
+### Wave
+The wave schema defines a user, a wavename and a url. When a wave is posted, the token sent with the request is decrypted and matched to a user. If a valid user is found, the wave's user property is set to reference that user's mongodb _id. The wave file will be transformed and posted to AWS, and the link to the AWS-hosted resource is returned and set to the wave's url property. The wavename is set to the value passed in the relevant field, however this is not a required parameter.
 ***
 ## Transforms
-1. *Bitcrusher*: Reduces the resolution of the audio from 8 or 16 bits to 3 bits without affecting the actual bit depth of the audio file.
+*Bitcrusher*: Reduces the resolution of the audio from 8 or 16 bits to 3 bits without affecting the actual bit depth of the audio file.
 
 ![picture of sound wave](/assets/bitcrusher.png)
 
-2. *Down Pitcher*: Reduces the sample rate of the audio file by half, reducing the maximum possible frequency of the recording which results in a lower pitch.
+*Down Pitcher*: Reduces the sample rate of the audio file by half, reducing the maximum possible frequency of the recording which results in a lower pitch.
 
 ![picture of sound wave](/assets/downpitcher.png)
 
-3. *Delay*: Adds a portion of the sound wave from a prior sample in the audio buffer to the current position via a fixed interval; simulating an echo.
+*Delay*: Adds a portion of the sound wave from a prior sample in the audio buffer to the current position via a fixed interval; simulating an echo.
 
 ![picture of sound wave](/assets/delay.png)
 ![picture of sound wave](/assets/delay2.png)
 
-4. *Noise Addition*: Adds or subtracts a small random number to each sample which has the effect of adding noise to the sound wave.  
+*Noise Addition*: Adds or subtracts a small random number to each sample which has the effect of adding noise to the sound wave.  
 
 ![picture of sound wave](/assets/noise.png)
 
-5. *Reverse*: Reverses the order of the bytes in the audio buffer of the sound wave.
+*Reverse*: Reverses the order of the bytes in the audio buffer of the sound wave.
 
 ![picture of sound wave](/assets/reverse.png)
 ***

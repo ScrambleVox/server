@@ -32,7 +32,7 @@ $ 'scramblevox logout'
 To perform a transform, type:
 $ 'scramblevox <transform> <filepath>'
 
-Note that the filepath is relative to your current directory.
+Note that the filepath is relative to the directory where this project was installed.
 The available transforms are currently 'bitcrusher', 'delay', 'noise', 'reverse' and 'downpitcher'.
 The file will be transformed and a link will be returned to the transformed file, which is hosted on AWS.
 

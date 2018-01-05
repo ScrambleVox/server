@@ -6882,3 +6882,12 @@
 {"message":"__ERROR__ username and password not required","stack":"NotFoundError: __ERROR__ username and password not required\n    at User.findOne.then.user (/Users/Andrew/cf/401/projects/scramblevox/server/lib/middleware/basic-auth.js:24:88)\n    at <anonymous>\n    at process._tickDomainCallback (internal/process/next_tick.js:228:7)","name":"NotFoundError","level":"info","timestamp":"2018-01-05T06:39:59.984Z"}
 {"level":"info","message":"Responding with a 404 status and message: __ERROR__ username and password not required","timestamp":"2018-01-05T06:39:59.984Z"}
 {"level":"info","message":"Server is off","timestamp":"2018-01-05T06:39:59.987Z"}
+{"level":"info","message":"Server is listening on port 3000","timestamp":"2018-01-05T08:22:44.810Z"}
+{"level":"info","message":"Processing : GET on : /login","timestamp":"2018-01-05T08:22:48.710Z"}
+{"level":"info","message":"__ERROR_MIDDLEWARE__","timestamp":"2018-01-05T08:22:48.731Z"}
+{"message":"__ERROR__ username and password not required","stack":"NotFoundError: __ERROR__ username and password not required\n    at User.findOne.then.user (/Users/Andrew/cf/401/projects/scramblevox/server/lib/middleware/basic-auth.js:24:15)\n    at <anonymous>\n    at process._tickDomainCallback (internal/process/next_tick.js:228:7)","name":"NotFoundError","level":"info","timestamp":"2018-01-05T08:22:48.731Z"}
+{"level":"info","message":"Responding with a 404 status and message: __ERROR__ username and password not required","timestamp":"2018-01-05T08:22:48.732Z"}
+{"level":"info","message":"Processing : POST on : /signup","timestamp":"2018-01-05T08:23:10.823Z"}
+{"level":"info","message":"Processing : GET on : /login","timestamp":"2018-01-05T08:23:31.280Z"}
+{"level":"info","message":"Processing : POST on : /waves/delay","timestamp":"2018-01-05T08:25:01.836Z"}
+{"level":"info","message":"Processing : POST on : /waves/delay","timestamp":"2018-01-05T08:42:30.385Z"}
