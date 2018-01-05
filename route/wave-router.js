@@ -50,7 +50,7 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
     transformFunc = reverse;
   }
   if (request.params.transform === 'scrambler'){
-    transformFunc = param => noiseAdd(downPitcher(delay(bitCrusher(param))));
+    transformFunc = param => downPitcher(waveParser(delay(waveParser(bitCrusher(param)))));
   }
   
   // Andrew - Can we refactor this with a Promise.all? Or something? I'd like to make this more dry, but we need to maintain the promise chain/order of events.
