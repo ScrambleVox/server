@@ -5,7 +5,7 @@ const superagent = require('superagent');
 const fsx = require('fs-extra');
 const help = require('./help');
 
-const __API_URL__ = 'http://localhost:3000';
+const __API_URL__ = 'https://scramblevox.herokuapp.com';
 const TOKEN_STORAGE = `${process.env.HOME}/.scramblevox-token.json`;
 let token = null;
 const transforms = ['bitcrusher', 'delay', 'noise', 'reverse', 'downpitcher'];
