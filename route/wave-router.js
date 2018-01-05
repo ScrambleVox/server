@@ -47,19 +47,13 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
   if (request.params.transform === 'reverse'){
     transformFunc = reverse;
   }
-  // if (request.params.transform === 'scrambler'){
-  //   transformFunc = param => downPitcher(waveParser(delay(waveParser(bitCrusher(param)))));
-  // }
   
   return Wave.findOne({user: request.user._id})
     .then(wave => {
-      console.log(wave);
       if(wave){
         
         const urlArray = wave.url.split('/');
         const oldKey = urlArray[urlArray.length - 1]; 
-        console.log(oldKey);
-        console.log(key);
         
         return s3.remove(oldKey)
           .then(() => {
@@ -71,7 +65,6 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
                     transformedFile = transformFunc(parsedFile);
                     return fsx.writeFile(tempFilePath, transformedFile)
                       .then(() => {
-                        console.log(key);
                         return S3.upload(tempFilePath, key)
                           .then(url => {
                             return new Wave({
