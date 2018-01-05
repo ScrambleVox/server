@@ -13,8 +13,7 @@ To pull up this reference guide, type:
 $ 'scramblevox help'
 at any time.
 
-The transforms work by making a post to the server running the scramblevox app. This CLI assumes you are running this server locally on port 3000, i.e. __API_URL__ = 'http://localhost:3000'
-Make sure the mongodb server is also open and listening for connections.
+The transforms work by making a post to the server running the scramblevox app.
 
 Basic authentication is performed when signing up or logging in, and a authorization token is returned. In order to make a post/get/delete, you must be signed in.
 
