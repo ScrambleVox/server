@@ -7,15 +7,14 @@ _scramble your voice by the method of your choice_
 
 ![picture of WAV file](/assets/AudacityWAV.png)
 ## Overview
-This API is designed to take an audio file and return a transformed version of that file. HTTP requests can be made to the server, which is built on RESTful principles. Users can send an 8 bit or 16 bit uncompressed WAV audio file, and depending on the request, one of a number of provided transforms will be performed (see 'Transforms'). A command line tool is provided for proof of concept, and as a handy way to easily perform the various transforms.
+This API is designed to take an audio file and return a transformed version of that file. HTTP requests can be made to the server, which is built on RESTful principles. Users can send an 8 bit or 16 bit uncompressed WAV audio file, and depending on the request, one of a number of provided transforms will be performed (see 'Transforms'). A command line tool is provided for proof of concept, and as a handy way to easily perform the various transforms by making requests to the deployed server on Heroku.
 ***
 
 ## Getting Started
 Familiarity with node, git and the command line are expected. To set up ScrambleVox on your own machine, take the following steps:
 1. Fork or clone the repository onto your machine
 2. Run 'npm i -g' from the cloned repo
-3. Open two new tabs in the terminal. On one, type 'npm run dbon' to open a connection with the mongoDB database. On the other, type 'npm run start' to start the server.
-4. To use the command line tools, type 'scramblevox `<command>`'. To see how to interact with the server using the CLI, simply type 'scramblevox', or 'scamblevox help' and the help file will be shown.
+3. To use the command line tools, type 'scramblevox `<command>`'. To see how to interact with the server using the CLI, simply type 'scramblevox', or 'scamblevox help' and the help file will be shown. Requests will be made to the deployed Heroku app.
 
 ## To Record a WAV format audio sample for use with this app
 [Audacity](https://www.audacityteam.org/) : free, open source, cross-platform audio software for multi-track recording and editing.
