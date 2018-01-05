@@ -69,19 +69,27 @@ Tests examine both proper behavior for each route as well as behavior when error
 
 ## Transforms
 1. *Bitcrusher*: Reduces the resolution of the audio from 8 or 16 bits to 2 bits without affecting bit depth.
+
 ![picture of sound wave](/assets/bitcrusher.png)
 
+
 2. *Down Pitcher*: Reduces the sample rate of the audio file by half, reducing the maximum possible frequency of the recording which results in a lower pitch.
+
 ![picture of sound wave](/assets/downpitcher.png)
 
+
 3. *Delay*: Adds a portion of the sound wave to the current point from the prior sound wave via a fixed interval; simulating an echo.
+
 ![picture of sound wave](/assets/delay.png)
 ![picture of sound wave](/assets/delay2.png)
+
 
 4. *Noise Addition*: Adds a small random number to each sample which has the effect of adding noise to the sound wave. 
 ![picture of sound wave](/assets/noise.png)
 
+
 5. *Reverse*: Reverses the sound wave.
+
 ![picture of sound wave](/assets/reverse.png)
 
 ## Routes
