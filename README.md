@@ -1,5 +1,19 @@
+# SCRAMBLE VOX
+[![Build Status](https://travis-ci.org/ScrambleVox/server.svg?branch=readme)](https://travis-ci.org/ScrambleVox/server)
+![Heroku](http://heroku-badge.herokuapp.com/?app=angularjs-crypto&style=flat&svg=1)
+
+
+_scramble a WAV file of your choice, with a transformation of your choice_
+
+![picture of WAV file](/assets/AudacityWAV.png)
+
+
 ## Purpose
 This API is designed based on RESTful principles. Currently it is focused on back-end functionality, with a CLI intended as a future improvement. It enables users to transform an 8 bit or 16 bit WAV audio file using one of the provided functions (see 'Transforms').
+
+## To Record audio in WAV formats for this app
+[Audacity](https://www.audacityteam.org/) : free, open source, cross-platform audio software for multi-track recording and editing for Mac, Windows, and Linux.
+
 
 ## Set Up
 To set up ScrambleVox on your own machine, follow the steps below.
@@ -54,21 +68,43 @@ Tests examine both proper behavior for each route as well as behavior when error
   * Tests success case in which the sample rate of the file is reduced 50%.
 
 ## Transforms
-1. Bitcrusher: Reduces the resolution of the audio from 8 or 16 bits to 2 bits without affecting bit depth.
+1. *Bitcrusher*: Reduces the resolution of the audio from 8 or 16 bits to 2 bits without affecting bit depth.
 
-2. Sample Rate Reduction: Reduces the sample rate of the audio file by half, reducing the maximum possible frequency of the recording.
+![picture of sound wave](/assets/bitcrusher.png)
+
+
+2. *Down Pitcher*: Reduces the sample rate of the audio file by half, reducing the maximum possible frequency of the recording which results in a lower pitch.
+
+![picture of sound wave](/assets/downpitcher.png)
+
+
+3. *Delay*: Adds a portion of the sound wave to the current point from the prior sound wave via a fixed interval; simulating an echo.
+
+![picture of sound wave](/assets/delay.png)
+![picture of sound wave](/assets/delay2.png)
+
+
+4. *Noise Addition*: Adds a small random number to each sample which has the effect of adding noise to the sound wave.  
+
+
+![picture of sound wave](/assets/noise.png)
+
+
+5. *Reverse*: Reverses the sound wave.
+
+![picture of sound wave](/assets/reverse.png)
 
 ## Routes
 ### Account setup
-1. POST /signup: Creates a new account and responds with a token. You must include a username (String), email (String), and password (String).
-2. GET /login: Accesses an account and returns a new token. You must send the account's username and password in the authorization header of the request. If no basic authentication is included a 400 error will occur.
+1. **POST** /signup: Creates a new account and responds with a token. You must include a username (String), email (String), and password (String).
+2. **GET** /login: Accesses an account and returns a new token. You must send the account's username and password in the authorization header of the request. If no basic authentication is included a 400 error will occur.
 
 ### Transforming files
-1. POST /waves/bitcrusher: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
-2. POST /waves/delay:
-3. POST /waves/noise-add:
-4. POST /waves/reverse:
-5. POST /waves/sample-rate-transform:
+1. **POST** /waves/bitcrusher: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
+2. **POST** /waves/delay: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
+3. **POST** /waves/noise-add: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
+4. **POST** /waves/reverse: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
+5. **POST** /waves/sample-rate-transform: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
 
 <!-- Do we want to include the section below? I don't think they're required but they were in some of the READMEs of the examples Vinicio shared -->
 
@@ -107,7 +143,11 @@ If you would like to help improve this API you can do so by opening an issue und
 ## License
 MIT (see License file)
 
-## Creators
+## Authors
+- Andrew Bloom | [GitHub](https://github.com/ALB37)
+- Jeff Kusowski | [GitHub](https://github.com/jjkusowski)
+- Shannon Dillon | [GitHub](https://github.com/sedillon93)
+- David A. Lindahl | [GitHub](https://github.com/austriker27)
 
-## Credits
+## Special Thanks
 Thank you to Vinicio Vladimir Sanchez Trejo, Steve Geluso, Izzy Baer, Joshua Evans, and Ron Dunphy for help problem solving and identifying useful tools to examine WAV files.
