@@ -11,8 +11,8 @@ describe('testing delay transform module', () => {
     delay(file);
     expect(file.data[0]).toEqual(255);
     expect(file.data[1]).toEqual(0);
-    expect(file.data[2]).toEqual(159);
-    expect(file.data[3]).toEqual(102);
+    expect(file.data[2]).toEqual(191);
+    expect(file.data[3]).toEqual(68);
   });
 
   test('expect that delay changes values for 16 bit file', () => {
@@ -27,8 +27,8 @@ describe('testing delay transform module', () => {
     delay(bigFile);
     expect(bigFile.data.readUInt16LE(0)).toEqual(65535);
     expect(bigFile.data.readUInt16LE(2)).toEqual(65535);
-    expect(bigFile.data.readUInt16LE(4)).toEqual(24574);
-    expect(bigFile.data.readUInt16LE(6)).toEqual(47852);
+    expect(bigFile.data.readUInt16LE(4)).toEqual(16382);
+    expect(bigFile.data.readUInt16LE(6)).toEqual(57842);
   });
   
   test('expect that delay still works correctly for 16 bit file when odd sample amount given', () => {
@@ -43,7 +43,7 @@ describe('testing delay transform module', () => {
     delay(bigFile);
     expect(bigFile.data.readUInt16LE(0)).toEqual(65535);
     expect(bigFile.data.readUInt16LE(2)).toEqual(65535);
-    expect(bigFile.data.readUInt16LE(4)).toEqual(24574);
-    expect(bigFile.data.readUInt16LE(6)).toEqual(47852);
+    expect(bigFile.data.readUInt16LE(4)).toEqual(16382);
+    expect(bigFile.data.readUInt16LE(6)).toEqual(57842);
   });
 });
