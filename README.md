@@ -135,8 +135,6 @@ Tests examine both proper behavior for each route as well as behavior when error
 * jest
 * superagent
 
-<!-- * libraries we used, if any -->
-
 ## Contribute
 If you would like to help improve this API you can do so by opening an issue under the 'Issues' tab on the repo. Please tell us what your feedback is related to by including a label (i.e. 'bug' to report a problem).
 
