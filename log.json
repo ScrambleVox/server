@@ -6819,3 +6819,13 @@
 {"level":"info","message":"Processing : POST on : /waves/scrambler","timestamp":"2018-01-05T03:17:13.101Z"}
 {"level":"info","message":"Processing : DELETE on : /waves","timestamp":"2018-01-05T03:20:15.403Z"}
 {"level":"info","message":"Processing : POST on : /waves/scrambler","timestamp":"2018-01-05T03:20:28.584Z"}
+{"level":"info","message":"Processing : POST on : /waves/reverse","timestamp":"2018-01-05T03:33:26.057Z"}
+{"level":"info","message":"Processing : POST on : /waves/reverse","timestamp":"2018-01-05T03:33:47.443Z"}
+{"level":"info","message":"Processing : POST on : /waves/reverse","timestamp":"2018-01-05T03:34:32.646Z"}
+{"level":"info","message":"Processing : DELETE on : /waves","timestamp":"2018-01-05T03:35:30.797Z"}
+{"level":"info","message":"Processing : GET on : /waves","timestamp":"2018-01-05T03:35:36.534Z"}
+{"level":"info","message":"__ERROR_MIDDLEWARE__","timestamp":"2018-01-05T03:35:36.539Z"}
+{"message":"__ERROR__ wave not found","stack":"NotFoundError: __ERROR__ wave not found\n    at Wave.findOne.then.wave (/Users/Andrew/cf/401/projects/scramblevox/server/route/wave-router.js:119:15)\n    at <anonymous>\n    at process._tickDomainCallback (internal/process/next_tick.js:228:7)","name":"NotFoundError","level":"info","timestamp":"2018-01-05T03:35:36.539Z"}
+{"level":"info","message":"Responding with a 404 status and message: __ERROR__ wave not found","timestamp":"2018-01-05T03:35:36.539Z"}
+{"level":"info","message":"Processing : POST on : /waves/reverse","timestamp":"2018-01-05T03:35:46.451Z"}
+{"level":"info","message":"Processing : GET on : /waves","timestamp":"2018-01-05T03:35:49.217Z"}

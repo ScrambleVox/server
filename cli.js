@@ -8,7 +8,7 @@ const help = require('./help');
 const __API_URL__ = 'http://localhost:3000';
 const TOKEN_STORAGE = `${process.env.HOME}/.scramblevox-token.json`;
 let token = null;
-const transforms = ['bitcrusher', 'delay', 'noise', 'reverse', 'downpitcher', 'scrambler'];
+const transforms = ['bitcrusher', 'delay', 'noise', 'reverse', 'downpitcher'];
 
 fsx.ensureFile(TOKEN_STORAGE)
   .then(() => {
@@ -75,7 +75,7 @@ else if (transforms.includes(process.argv[2])){
         .then(response => {
           console.log(`Follow this link to download your transformed file:\n${response.body.url}\nNote that new transforms will remove existing links`);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err.status, err.response.text));
     });
 }
 

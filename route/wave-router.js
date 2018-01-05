@@ -1,6 +1,5 @@
 'use strict';
 
-// ROUTER
 const {Router} = require('express');
 const httpErrors = require('http-errors');
 const fsx = require('fs-extra');
@@ -15,7 +14,6 @@ const reverse = require('../lib/transforms/reverse');
 const Wave = require('../model/wave');
 const s3 = require('../lib/middleware/s3');
 
-// FOR UPLOADING
 const multer = require('multer');
 const upload = multer({dest: `${__dirname}/../temp`});
 const S3 = require('../lib/middleware/s3');
@@ -49,11 +47,9 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
   if (request.params.transform === 'reverse'){
     transformFunc = reverse;
   }
-  if (request.params.transform === 'scrambler'){
-    transformFunc = param => downPitcher(waveParser(delay(waveParser(bitCrusher(param)))));
-  }
-  
-  // Andrew - Can we refactor this with a Promise.all? Or something? I'd like to make this more dry, but we need to maintain the promise chain/order of events.
+  // if (request.params.transform === 'scrambler'){
+  //   transformFunc = param => downPitcher(waveParser(delay(waveParser(bitCrusher(param)))));
+  // }
 
   return Wave.findOne({user: request.user._id})
     .then(wave => {
@@ -80,7 +76,7 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
                               url,
                             }).save();
                           })
-                          .then(wave => response.json(wave)) //TODO: can change this to download or other response method? download wave.url?
+                          .then(wave => response.json(wave))
                           .catch(next);
                       });
                   });
@@ -102,7 +98,7 @@ waveRouter.post('/waves/:transform', bearerAuth, upload.any(), (request, respons
                       url,
                     }).save();
                   })
-                  .then(wave => response.json(wave)) //TODO: can change this to download or other response method? download wave.url?
+                  .then(wave => response.json(wave))
                   .catch(next);
               });
           });
