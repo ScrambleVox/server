@@ -133,11 +133,11 @@ If you would like to help improve this API you can do so by opening an issue und
 ## License
 MIT (see License file)
 
-## Creators
+## Authors
 - Andrew Bloom | [GitHub](https://github.com/ALB37)
 - Jeff Kusowski | [GitHub](https://github.com/jjkusowski)
 - Shannon Dillon | [GitHub](https://github.com/sedillon93)
 - David A. Lindahl | [GitHub](https://github.com/austriker27)
 
-## Credits
+## Special Thanks
 Thank you to Vinicio Vladimir Sanchez Trejo, Steve Geluso, Izzy Baer, Joshua Evans, and Ron Dunphy for help problem solving and identifying useful tools to examine WAV files.
