@@ -84,7 +84,9 @@ Tests examine both proper behavior for each route as well as behavior when error
 ![picture of sound wave](/assets/delay2.png)
 
 
-4. *Noise Addition*: Adds a small random number to each sample which has the effect of adding noise to the sound wave. 
+4. *Noise Addition*: Adds a small random number to each sample which has the effect of adding noise to the sound wave.  
+
+
 ![picture of sound wave](/assets/noise.png)
 
 
