@@ -15,6 +15,10 @@
   },
   "author": "Andrew Bloom, David Lindahl, Jeff Kusowski, Shannon Dillon",
   "license": "MIT",
+  "bin": {
+    "scramblevox": "./cli.js"
+  },
+  "preferGlobal": true,
   "devDependencies": {
     "aws-sdk-mock": "^1.7.0",
     "eslint": "^4.14.0",

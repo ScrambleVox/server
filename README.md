@@ -2,53 +2,86 @@
 [![Build Status](https://travis-ci.org/ScrambleVox/server.svg?branch=readme)](https://travis-ci.org/ScrambleVox/server)
 ![Heroku](http://heroku-badge.herokuapp.com/?app=angularjs-crypto&style=flat&svg=1)
 
+_scramble your voice by the method of your choice_
 
-_scramble a WAV file of your choice, with a transformation of your choice_
 
 ![picture of WAV file](/assets/AudacityWAV.png)
+## Overview
+This API is designed to take an audio file and return a transformed version of that file. HTTP requests can be made to the server, which is built on RESTful principles. Users can send an 8 bit or 16 bit uncompressed WAV audio file, and depending on the request, one of a number of provided transforms will be performed (see 'Transforms'). A command line tool is provided for proof of concept, and as a handy way to easily perform the various transforms.
+***
 
+## Getting Started
+Familiarity with node, git and the command line are expected. To set up ScrambleVox on your own machine, take the following steps:
+1. Fork or clone the repository onto your machine
+2. Run 'npm i -g' from the cloned repo
+3. Open two new tabs in the terminal. On one, type 'npm run dbon' to open a connection with the mongoDB database. On the other, type 'npm run start' to start the server.
+4. To use the command line tools, type 'scramblevox `<command>`'. To see how to interact with the server using the CLI, simply type 'scramblevox', or 'scamblevox help' and the help file will be shown.
 
-## Purpose
-This API is designed based on RESTful principles. Currently it is focused on back-end functionality, with a CLI intended as a future improvement. It enables users to transform an 8 bit or 16 bit WAV audio file using one of the provided functions (see 'Transforms').
+## To Record a WAV format audio sample for use with this app
+[Audacity](https://www.audacityteam.org/) : free, open source, cross-platform audio software for multi-track recording and editing.
+***
+## Models
+### User
+The user schema defines a userame, passwordHash, passwordSalt and email. The username and email must be unique. When a user signs up, a passwordSalt is randomly generated, and a hash is created using this along with their password. The password is never stored anywhere. A token seed is then randomly generated and encrypted with the application's secret salt, and the resulting token is returned to the user. When the user logs back in, their password is hashed along with their passwordSalt, and if this matches the stored hash, a new tokenSeed is generated, stored, encrypted and the resulting token is sent back to the user. When certain requests are made, the user sends their token, which is decrypted by the secret salt, and if it matches their tokenseed, they are authorized to finish making the request.
+### Wave
+The wave schema defines a user, a wavename and a url. When a wave is posted, the token sent with the request is decrypted and matched to a user. If a valid user is found, the wave's user property is set to reference that user's mongodb _id. The wave file will be transformed and posted to AWS, and the link to the AWS-hosted resource is returned and set to the wave's url property. The wavename is set to the value passed in the relevant field, however this is not a required parameter.
+***
+## Transforms
+*Bitcrusher*: Reduces the resolution of the audio from 8 or 16 bits to 3 bits without affecting the actual bit depth of the audio file.
 
-## To Record audio in WAV formats for this app
-[Audacity](https://www.audacityteam.org/) : free, open source, cross-platform audio software for multi-track recording and editing for Mac, Windows, and Linux.
+![picture of sound wave](/assets/bitcrusher.png)
 
+*Down Pitcher*: Reduces the sample rate of the audio file by half, reducing the maximum possible frequency of the recording which results in a lower pitch.
 
-## Set Up
-To set up ScrambleVox on your own machine, follow the steps below.
+![picture of sound wave](/assets/downpitcher.png)
 
-1. Fork or clone the repository into whatever directory you want.
-2. Run 'npm i' from within the repo folder.
-  * To install jest for testing purposes run 'npm i jest' as well
+*Delay*: Adds a portion of the sound wave from a prior sample in the audio buffer to the current position via a fixed interval; simulating an echo.
 
-3. Open a new tab in the terminal and run 'npm run dbon' to open a connection with the mongoDB database.
-4. Finally run 'node index.js' to initialize the program
+![picture of sound wave](/assets/delay.png)
+![picture of sound wave](/assets/delay2.png)
 
+*Noise Addition*: Adds or subtracts a small random number to each sample which has the effect of adding noise to the sound wave.  
 
+![picture of sound wave](/assets/noise.png)
+
+*Reverse*: Reverses the order of the bytes in the audio buffer of the sound wave.
+
+![picture of sound wave](/assets/reverse.png)
+***
+## Routes
+### Account setup
+1. **POST** __api_url__/signup : Creates a new account and responds with a token. You must include a username (String), email (String), and password (String).
+2. **GET** __api_url__/login : Accesses an account and returns a new token. You must send the account's username and password in the auth header of the request. If no basic authentication is included a 400 error will occur.
+
+### Transforming files
+1. **POST** __api_url__/waves/:transform : Transforms an audio file with the given transform function and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur. If a file already exists in the database, it will be removed from both AWS and the database first before uploading the new file.
+2. **GET** __api_url__/waves : Returns the wave that is stored in the database which belongs to the user with whom the sent token is associated. A 401 will occur if the bearer authorization fails.
+2 **DELETE** __api_url__/waves : Removes the wave which belongs to the user with whom the sent token is associated. The file will be removed from both AWS and the database. A 401 will occur if bearer authorization fails.
+
+***
 ## Tests
-ScrambleVox implements continuous integration (CI) via Travis CI and continuous deployment via Heroku. Only modules which pass all tests and build properly will be automatically deployed on Heroku.
+ScrambleVox implements continuous integration (CI) via Travis CI and is deployed on Heroku. Tests are performed with Jest. Pushes to master will be tested by Travis, and if all tests pass, an updated build will be automatically deployed on Heroku.
 
-Tests examine both proper behavior for each route as well as behavior when errors occur. The following tests can be executed by running 'npm test' after following the steps under 'Set Up'. Note: failure to set up the API properly before running tests will prevent tests from running.
+Tests examine both proper behavior for each route as well as behavior when errors occur. The following tests can be executed by running 'npm run test' after installing Jest with 'npm i jest'. Note: in order to successfully run the tests, the mongodb server must be on, and the server must be off.
 
 1. User Router Tests
   * POST
     * Tests success case in which the username, email, and password are included and a new account and token are successfully created.
     * Tests failure cases in which:
       * The request is missing information (username, email, and password are all required)
-      * Either the username or email provided are already being used for another account
+      * The username and/or email provided are already being used on an existing account
 
   * GET
     * Tests success case in which the account username and password are verified and a token can successfully be returned.
     * Tests failure cases in which:
-      * No basic authentication is provided in the HTTP authorization header.
+      * No bearer authorization is provided in the HTTP authorization header.
       * No user can be found with the specified username and password.
 
 2. Wave Router Tests
   * Tests success case in which a user successfully makes an account, the file provided is modified, and the url to the modified file is returned.
   * Tests failure cases in which:
     * The user is verified using bearer authorization but the request is bad.
-    * No authorization header is included in the request.
+    * No authorization header or a bad token is sent with the request.
 
 3. Wave Parser Tests
   * Tests success case in which file meets all requirements and a new Constructed Wave File is created.
@@ -61,59 +94,11 @@ Tests examine both proper behavior for each route as well as behavior when error
     * The sample rate is too high (above 48k)
     * The file has a bit depth other than 8 or 16 bits
 
-4. Bitcrusher Tests
-  * Tests success cases for 8 bit and 16 bit files in which the second part of each sample is "crushed", flattening out waves into a more rectangular shape.
-
-5. Sample Rate Tests
-  * Tests success case in which the sample rate of the file is reduced 50%.
-
-## Transforms
-1. *Bitcrusher*: Reduces the resolution of the audio from 8 or 16 bits to 2 bits without affecting bit depth.
-
-![picture of sound wave](/assets/bitcrusher.png)
-
-
-2. *Down Pitcher*: Reduces the sample rate of the audio file by half, reducing the maximum possible frequency of the recording which results in a lower pitch.
-
-![picture of sound wave](/assets/downpitcher.png)
-
-
-3. *Delay*: Adds a portion of the sound wave to the current point from the prior sound wave via a fixed interval; simulating an echo.
-
-![picture of sound wave](/assets/delay.png)
-![picture of sound wave](/assets/delay2.png)
-
-
-4. *Noise Addition*: Adds a small random number to each sample which has the effect of adding noise to the sound wave.  
-
-
-![picture of sound wave](/assets/noise.png)
-
-
-5. *Reverse*: Reverses the sound wave.
-
-![picture of sound wave](/assets/reverse.png)
-
-## Routes
-### Account setup
-1. **POST** /signup: Creates a new account and responds with a token. You must include a username (String), email (String), and password (String).
-2. **GET** /login: Accesses an account and returns a new token. You must send the account's username and password in the authorization header of the request. If no basic authentication is included a 400 error will occur.
-
-### Transforming files
-1. **POST** /waves/bitcrusher: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
-2. **POST** /waves/delay: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
-3. **POST** /waves/noise-add: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
-4. **POST** /waves/reverse: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
-5. **POST** /waves/sample-rate-transform: Transforms an audio file and returns a url to the modified file. You must send the token for your account in the authorization header of the request. If no bearer authorization is included a 401 error will occur.
-
-<!-- Do we want to include the section below? I don't think they're required but they were in some of the READMEs of the examples Vinicio shared -->
-
-<!-- ## Internal Infrastructure/Code Examples
-1. models (user and wave)
-2. middleware (express, fs-extra?, error, logger, basic auth, bearer auth) -->
-
+4. Transform Tests
+  * Tests success cases for 8 bit and 16 bit files, i.e. that the expected results from the transform in question are properly returned.
+***
 ## Technologies Used
-### For production
+### Production
 * ES6
 * node
 * aws-sdk
@@ -128,26 +113,24 @@ Tests examine both proper behavior for each route as well as behavior when error
 * multer
 * winston
 
-### For development
+### Development
 * aws-sdk-mock
 * eslint
 * faker
 * jest
 * superagent
-
-<!-- * libraries we used, if any -->
-
-## Contribute
-If you would like to help improve this API you can do so by opening an issue under the 'Issues' tab on the repo. Please tell us what your feedback is related to by including a label (i.e. 'bug' to report a problem).
-
+***
+## To Contribute
+If you would like to help improve this API you can do so by opening an issue under the 'Issues' tab on the repo. We welcome any helpful feedback! Be sure to include a label to help us better understand the issue (i.e. 'bug' to report a problem).
+***
 ## License
 MIT (see License file)
-
+***
 ## Authors
 - Andrew Bloom | [GitHub](https://github.com/ALB37)
-- Jeff Kusowski | [GitHub](https://github.com/jjkusowski)
 - Shannon Dillon | [GitHub](https://github.com/sedillon93)
+- Jeff Kusowski | [GitHub](https://github.com/jjkusowski)
 - David A. Lindahl | [GitHub](https://github.com/austriker27)
-
+***
 ## Special Thanks
 Thank you to Vinicio Vladimir Sanchez Trejo, Steve Geluso, Izzy Baer, Joshua Evans, and Ron Dunphy for help problem solving and identifying useful tools to examine WAV files.
