@@ -1,4 +1,6 @@
-# SCRAMBLE VOX
+![Logo](/assets/scramblevox.logo.png)
+
+
 [![Build Status](https://travis-ci.org/ScrambleVox/server.svg?branch=readme)](https://travis-ci.org/ScrambleVox/server)
 ![Heroku](http://heroku-badge.herokuapp.com/?app=angularjs-crypto&style=flat&svg=1)
 
