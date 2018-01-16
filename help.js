@@ -1,5 +1,9 @@
 'use strict';
 
+// REVIEW: refer to REVIEW.md to see how I think this file can be condensed.
+// It's too verbose. It's hard to see just what the commands are at a quick
+// glance.
+
 module.exports = () => {
   console.log(`
 Welcome to the scramblevox CLI!
